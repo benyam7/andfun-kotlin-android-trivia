@@ -43,14 +43,20 @@ class GameWonFragment : Fragment() {
         val args = GameWonFragmentArgs.fromBundle(arguments!!)
         // display the values using Toast
         Toast.makeText(context, "You have answered ${args.numOfAnswers} questions correctly out of ${args.numOfQuestions}", Toast.LENGTH_SHORT).show()
-
         setHasOptionsMenu(true)
+
 
         return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
+        // check early if the intent your creating resolves to activity with out issue
+        if(createShareIntent().resolveActivity(activity!!.packageManager) == null){
+            //hide the specific menu item, that caused the issue this give us the flexiblity of hiding the one we choose
+            menu?.findItem(R.id.share)?.setVisible(false)
+        }
+
         inflater?.inflate(R.menu.winner_menu, menu)
     }
 
@@ -59,13 +65,11 @@ class GameWonFragment : Fragment() {
             R.id.share -> shareResults()
         }
         return super.onOptionsItemSelected(item)
-
     }
 
 
     private fun shareResults() {
         startActivity(createShareIntent())
-
     }
 
     private fun createShareIntent(): Intent {
