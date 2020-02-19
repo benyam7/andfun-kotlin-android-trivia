@@ -20,6 +20,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.core.app.ShareCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -69,10 +70,12 @@ class GameWonFragment : Fragment() {
 
     private fun createShareIntent(): Intent {
         val args = GameWonFragmentArgs.fromBundle(arguments!!)
-        val shareIntent = Intent(Intent.ACTION_SEND) // create implicity intent with action
-                .setType("text/plain")  // set the MIME type here
-                .putExtra(Intent.EXTRA_TEXT, getString(R.string.share_success_text, args.numOfAnswers, args.numOfQuestions)) //passing data to formated string resource
+        // using fluent shareCompat api , by fluent we mean it has method chaining that is easy to read
+        return ShareCompat.IntentBuilder.from(activity)
+                .setText(getString(R.string.share_success_text, args.numOfAnswers, args.numOfQuestions)) // set our text data
+                .setType("text/plain")  // set our data type
+                .intent // build the intent
 
-        return shareIntent
     }
+
 }
