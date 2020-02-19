@@ -47,7 +47,14 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
         //Hook up the navigation UI up to the navigation view
         NavigationUI.setupWithNavController(binding.navView, navController)
-
+        // prevent nav swipe gesture if not on start destination
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            if(destination.id == controller.graph.startDestination){
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            }else{
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            }
+        }
 
     }
 
